@@ -4,7 +4,7 @@ This example is boards focusing on data input / output for easy understanding of
 
 This app has been tested only on Android.
 
-![Screenshot](./screenshot.png =250x)
+<img src="screenshot.png" alt="drawing" width="200"/>
 
 ### Install & Run ###
 - git clone https://github.com/gujc71/rn_board.git
