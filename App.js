@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, FlatList, Text, TextInput, Button, View, TouchableHighlight} from 'react-native';
+import {StyleSheet, FlatList, Text, TextInput, Button, View, Alert,
+        TouchableHighlight, TouchableOpacity} from 'react-native';
 
 export default class App extends Component {
   state = {
@@ -41,6 +42,18 @@ export default class App extends Component {
     this.setState({selectedBoard: item});
   }
 
+  handleDelete = (brdno) => {
+    Alert.alert(
+      'Board delete',
+      'Are you sure you want to delete?',
+      [
+        {text: 'Cancel'},
+        {text: 'OK', onPress: () => this.setState({boards: this.state.boards.filter(row => row.brdno !== brdno)})    },
+      ],
+      { cancelable: false }
+    )
+  }
+
   render() {
     const { boards, selectedBoard } = this.state;
  
@@ -60,9 +73,16 @@ export default class App extends Component {
           renderItem={({item}) =>
             <TouchableHighlight onPress={() => this.handleRowClick(item)}>
               <View style={styles.listRow}>
-                <Text style={styles.item5} numberOfLines={1} ellipsizeMode='tail'>{item.brdtitle}</Text>
-                <Text style={styles.item3}>{item.brdwriter}</Text>
-                <Text style={styles.item3}>{item.brddate.toDateString()}</Text>
+                <View style={styles.item5} >
+                  <Text numberOfLines={1} ellipsizeMode='tail'>{item.brdtitle}</Text>
+                </View>
+                <View style={styles.item2}><Text>{item.brdwriter}</Text></View>
+                <View style={styles.item2}><Text>{item.brddate.toDateString()}</Text></View>
+                <View style={styles.item1}>
+                  <TouchableOpacity onPress={() => this.handleDelete(item.brdno)}>
+                    <Text>X</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </TouchableHighlight>
           }
@@ -86,8 +106,15 @@ const styles = StyleSheet.create({
   listRow: {
     flexDirection: 'row',
   },
-  item3: {
-    flex: 0.3,
+  item1: {
+    flex: 0.1,
+    padding: 10,
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: 'black',    
+  },  
+  item2: {
+    flex: 0.2,
     padding: 10,
     fontSize: 15,
     borderWidth: 1,
