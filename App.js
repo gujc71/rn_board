@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, FlatList, Text, TextInput, Button, View, Alert,
+import {StyleSheet, FlatList, Text, TextInput, Button, View, Alert, Modal,
         TouchableHighlight, TouchableOpacity} from 'react-native';
+import dateFormat from 'dateformat';
 
 export default class App extends Component {
   state = {
@@ -19,7 +20,8 @@ export default class App extends Component {
           brddate: new Date()
         }
     ],
-    selectedBoard: {}
+    selectedBoard: {},
+    modalVisible: false,
   }
 
   handleSave = () => {
@@ -36,10 +38,12 @@ export default class App extends Component {
       })       
     }
     this.setState({selectedBoard: {}});
+    this.setModalVisible(false);
   }
 
   handleRowClick = (item) => {
     this.setState({selectedBoard: item});
+    this.setModalVisible(true);
   }
 
   handleDelete = (brdno) => {
@@ -54,6 +58,10 @@ export default class App extends Component {
     )
   }
 
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
   render() {
     const { boards, selectedBoard } = this.state;
  
@@ -62,11 +70,8 @@ export default class App extends Component {
         <View style={styles.appTitle}> 
           <Text style={styles.appText}>Boards</Text>
         </View>      
-        <View>
-          <TextInput name="brdtitle" value={selectedBoard.brdtitle} onChangeText={brdtitle => this.setState({ selectedBoard: {...selectedBoard, brdtitle} })} placeholder="Title" />
-          <TextInput name="brdwriter" value={selectedBoard.brdwriter} onChangeText={brdwriter => this.setState({ selectedBoard: {...selectedBoard, brdwriter} })} placeholder="Name" />
-          <Button title="Save" onPress={this.handleSave}
-          />
+        <View style={{width: 100}}>
+          <Button title="New" onPress={()=>{this.setModalVisible(true);}}/>
         </View>      
         <FlatList
           data={boards}
@@ -77,7 +82,7 @@ export default class App extends Component {
                   <Text numberOfLines={1} ellipsizeMode='tail'>{item.brdtitle}</Text>
                 </View>
                 <View style={styles.item2}><Text>{item.brdwriter}</Text></View>
-                <View style={styles.item2}><Text>{item.brddate.toDateString()}</Text></View>
+                <View style={styles.item2}><Text>{dateFormat(item.brddate, "yyyy-mm-dd")}</Text></View>
                 <View style={styles.item1}>
                   <TouchableOpacity onPress={() => this.handleDelete(item.brdno)}>
                     <Text>X</Text>
@@ -88,6 +93,19 @@ export default class App extends Component {
           }
           keyExtractor={item => item.brdno.toString()}
         />
+        <Modal animationType="slide" transparent={false} visible={this.state.modalVisible} onRequestClose={() => {}}>
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>Write a post</Text>
+              <TextInput name="brdtitle" value={selectedBoard.brdtitle} onChangeText={brdtitle => this.setState({ selectedBoard: {...selectedBoard, brdtitle} })} placeholder="Title" />
+              <TextInput name="brdwriter" value={selectedBoard.brdwriter} onChangeText={brdwriter => this.setState({ selectedBoard: {...selectedBoard, brdwriter} })} placeholder="Name" />
+              <View style={styles.listRow}>              
+                <Button style={styles.item2} title="Save" onPress={this.handleSave}/>
+                <Button style={styles.item2} title="Close" onPress={() => { this.setModalVisible(false); }}/>
+              </View>
+            </View>
+          </View>
+        </Modal>        
       </View>  
     );
   }
