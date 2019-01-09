@@ -9,6 +9,7 @@ This app has been tested only on Android.
 ### Branches ###
 - master: Implement input screen and list in one activity
 - modal: Implement input screen in modal
+- redux: React-Native + Redux
 
 ### Install & Run ###
 - git clone https://github.com/gujc71/rn_board.git

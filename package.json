@@ -7,8 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "dateformat": "^3.0.3",
     "react": "16.6.1",
-    "react-native": "0.57.7"
+    "react-native": "0.57.7",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-actions": "^2.6.4"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
